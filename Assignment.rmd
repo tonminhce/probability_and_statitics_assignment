@@ -1,0 +1,149 @@
+---
+title: "CC02"
+output: html_notebook
+---
+
+```{r}
+game <- read.csv("D:/game.csv")
+game <- read.csv("D:/game.csv", header = TRUE, colClasses = c("numeric", "numeric", "numeric", "numeric", "numeric", "numeric"), fileEncoding='UTF-8-BOM')
+summary(game)
+```
+
+```{r}
+par(mfrow=c(2,3))
+hist(game$Age, xlab="Age" , ylab="Frequency of Age",main="Histogram of Age")
+hist(game$HoursPerWeek, xlab="Hours Per Week" , ylab="Frequency of Hours Per Week",main="Histogram of Hours Per Week")
+hist(game$HoursPerDay, xlab="Hours Per Day" , ylab="Frequency of Hours Per day",main="Histogram of Hours Per Day")
+hist(game$LeagueIndex, xlab="League Index" , ylab="Frequency of League Index",main="Histogram of League Index")
+hist(game$TotalHours, xlab="Total Hours" , ylab="Frequency of Total Hours",main="Histogram of Total Hours",breaks=seq(10,9000,by=10))
+hist(game$APM, xlab="Actions Per Minute" , ylab="Frequency of Actions Per Minute",main="Histogram of Actions Per Minute")
+```
+
+```{r}
+par(mfrow=c(2,4))
+hist(game$LeagueIndex[game$Age=="18"], xlab="18" ,main = "")
+hist(game$LeagueIndex[game$Age=="19"], xlab="19" ,main = "")
+hist(game$LeagueIndex[game$Age=="20"], xlab="20" ,main = "")
+hist(game$LeagueIndex[game$Age=="21"], xlab="21" ,main = "")
+hist(game$LeagueIndex[game$Age=="22"], xlab="22" ,main = "")
+hist(game$LeagueIndex[game$Age=="23"], xlab="23" ,main = "")
+hist(game$LeagueIndex[game$Age=="24"], xlab="24" ,main = "")
+hist(game$LeagueIndex[game$Age=="25"], xlab="25" ,main = "")
+```
+
+```{r}
+par(mfrow=c(2,4))
+hist(game$HoursPerWeek[game$Age=="18"], xlab="18" ,main = "")
+hist(game$HoursPerWeek[game$Age=="19"], xlab="19" ,main = "")
+hist(game$HoursPerWeek[game$Age=="20"], xlab="20" ,main = "")
+hist(game$HoursPerWeek[game$Age=="21"], xlab="21" ,main = "")
+hist(game$HoursPerWeek[game$Age=="22"], xlab="22" ,main = "")
+hist(game$HoursPerWeek[game$Age=="23"], xlab="23" ,main = "")
+hist(game$HoursPerWeek[game$Age=="24"], xlab="24" ,main = "")
+hist(game$HoursPerWeek[game$Age=="25"], xlab="25" ,main = "")
+```
+```{r}
+par(mfrow=c(2,4))
+hist(game$HoursPerDay[game$Age=="18"], xlab="18" ,main = "")
+hist(game$HoursPerDay[game$Age=="19"], xlab="19" ,main = "")
+hist(game$HoursPerDay[game$Age=="20"], xlab="20" ,main = "")
+hist(game$HoursPerDay[game$Age=="21"], xlab="21" ,main = "")
+hist(game$HoursPerDay[game$Age=="22"], xlab="22" ,main = "")
+hist(game$HoursPerDay[game$Age=="23"], xlab="23" ,main = "")
+hist(game$HoursPerDay[game$Age=="24"], xlab="24" ,main = "")
+hist(game$HoursPerDay[game$Age=="25"], xlab="25" ,main = "")
+```
+
+```{r}
+par(mfrow=c(2,4))
+hist(game$TotalHours[game$Age=="18"], xlab="18" ,main = "")
+hist(game$TotalHours[game$Age=="19"], xlab="19" ,main = "")
+hist(game$TotalHours[game$Age=="20"], xlab="20" ,main = "")
+hist(game$TotalHours[game$Age=="21"], xlab="21" ,main = "")
+hist(game$TotalHours[game$Age=="22"], xlab="22" ,main = "")
+hist(game$TotalHours[game$Age=="23"], xlab="23" ,main = "")
+hist(game$TotalHours[game$Age=="24"], xlab="24" ,main = "")
+hist(game$TotalHours[game$Age=="25"], xlab="25" ,main = "")
+```
+```{r}
+par(mfrow=c(2,4))
+hist(game$APM[game$Age=="18"], xlab="18" ,main = "")
+hist(game$APM[game$Age=="19"], xlab="19" ,main = "")
+hist(game$APM[game$Age=="20"], xlab="20" ,main = "")
+hist(game$APM[game$Age=="21"], xlab="21" ,main = "")
+hist(game$APM[game$Age=="22"], xlab="22" ,main = "")
+hist(game$APM[game$Age=="23"], xlab="23" ,main = "")
+hist(game$APM[game$Age=="24"], xlab="24" ,main = "")
+hist(game$APM[game$Age=="25"], xlab="25" ,main = "")
+```
+
+```{r}
+boxplot(HoursPerWeek~Age, data=game )
+boxplot(HoursPerDay~Age, data=game )
+boxplot(TotalHours~Age, data=game )
+boxplot(LeagueIndex~Age, data=game)
+boxplot(APM~Age, data=game )
+```
+```{r}
+library(ggplot2)
+library(GGally)
+data <- data.frame(game$HoursPerWeek, game$TotalHours, game$LeagueIndex)
+ggpairs(data = data, lower=list(continuous="smooth", wrap=c(colour="blue")),
+upper=list(wrap=list(corSize=6)), axisLabels='show')
+```
+```{r}
+plot(LeagueIndex ~ APM, data=game)
+
+plot(HoursPerDay ~ APM, data=game)
+plot(TotalHours ~ APM, data=game)
+```
+
+```{r}
+S.aov.factor = aov(HoursPerDay~factor(Age), data =  game)
+summary(S.aov.factor)
+
+```
+```{r}
+C.aov.factor = aov(TotalHours~factor(Age), data =  game)
+summary(C.aov.factor)
+```
+```{r}
+A.aov.factor = aov(LeagueIndex~factor(Age), data =  game)
+summary(A.aov.factor)
+```
+```{r}
+TukeyHSD(S.aov.factor)
+```
+```{r}
+TukeyHSD(C.aov.factor)
+```
+```{r}
+TukeyHSD(A.aov.factor)
+```
+
+```{r}
+#Question 5: Linear Regression Model
+ageAndHours <- lm(HoursPerDay ~ Age, data = game)
+
+summary(ageAndHours)
+
+plot(game$Age, game$HoursPerDay, pch = 16, col = "blue")
+
+abline(ageAndHours, col= "red")
+
+# [RESIDUALS]: The distance from the data to the fitted line (the red line)
+# [COEFFICIENTS]:
+# ~ (Intercept):The intercept value
+# ~ Age: The slope value
+# ~ Std. Error: Standard error
+# ~ t value 
+# ~ Pr(>|t|): p value
+```
+
+
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
